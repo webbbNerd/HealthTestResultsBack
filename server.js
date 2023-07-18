@@ -1,66 +1,41 @@
 const express = require("express");
-const http = require("http");
-const app = express();
-const server = http.createServer(app);
-const socket = require("socket.io");
-const DB = require("./database");
-const cors = require("cors");
 const dotenv = require("dotenv");
+const cors = require("cors");
+
+const isAuthenticated = require("./middleware/auth");
+const app = express();
+
+const DB = require("./database");
 dotenv.config({ path: "./config.env" });
 
-const io = socket(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
+let ready = false;
 
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
-});
-
-const users = {};
-
+app.use(express.json());
 app.use(cors());
 
-// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-
-DB();
-
-// app.use(cors({ origin: ["https://localhost:3000", "https://127.0.0.1:3000"] }));
-
-io.on("connection", (socket) => {
-  console.log(socket.id, "connected");
-  if (!users[socket.id]) {
-    users[socket.id] = socket.id;
-  }
-  socket.emit("yourID", socket.id);
-  io.sockets.emit("allUsers", users);
-  socket.on("disconnect", () => {
-    delete users[socket.id];
-    console.log(socket.id, "disconnected");
-  });
-
-  socket.on("callUser", (data) => {
-    socket.to(data.userToCall).emit("hey", {
-      signal: data.signalData,
-      from: data.from,
-    });
-  });
-
-  socket.on("acceptCall", (data) => {
-    socket.to(data.to).emit("callAccepted", data.signal);
-  });
-
-  socket.on("candidate", (data) => {
-    socket.to(data.to).emit("candidate", data.candidate);
-  });
+app.use((req, res, next) => {
+  // Reject any incoming requests if server is not ready
+  if (!ready) return res.sendStatus(500);
+  next();
 });
 
-const signup = require("./router/auth");
-app.use("/register", signup);
+app.get("/ping", (req, res) => {
+  res.send("pong");
+});
 
-const login = require("./router/login");
-app.use("/login", login);
+app.use("/register", require("./router/register"));
+app.use("/login", require("./router/login"));
 
-server.listen(8000, () => console.log("server is running on port 8000"));
+app.use("/userdata", isAuthenticated, require("./router/createRecord"));
+
+app.listen(8000, async () => {
+  try {
+    await DB();
+    console.log("Database Connection successful");
+    console.log("server is running on port 8000");
+    ready = true;
+  } catch (error) {
+    console.log(err, "Database Connection failed, exiting");
+    process.exit();
+  }
+});
