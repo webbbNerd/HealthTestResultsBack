@@ -22,6 +22,34 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/report/:id", async (req, res, next) => {
+  try {
+    const dataId = req.params.id;
+
+    const savedData = await UserData.findById(dataId);
+
+    if (!savedData)
+      return res.status(404).json({
+        data: null,
+        success: false,
+        error: true,
+        message: "Document not found",
+      });
+
+    return res.json({
+      success: true,
+      error: false,
+      message: "Data found for user",
+      data: savedData,
+    });
+  } catch (err) {
+    console.error(err);
+    return res
+      .status(500)
+      .json({ data: null, success: false, error: true, message: err.message });
+  }
+});
+
 router.post("/", async (req, res, next) => {
   try {
     const { userId } = req.headers;
@@ -94,7 +122,7 @@ router.delete("/:id", async (req, res, next) => {
     const deleted = await UserData.findByIdAndDelete(dataId);
     return res.json({
       data: deleted,
-      message: "Deletion successful",
+      message: "Data deleted successfully",
       error: false,
       success: true,
     });

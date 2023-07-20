@@ -35,7 +35,7 @@ app.listen(8000, async () => {
     console.log("server is running on port 8000");
     ready = true;
   } catch (error) {
-    console.log(err, "Database Connection failed, exiting");
+    console.log(error, "Database Connection failed, exiting");
     process.exit();
   }
 });

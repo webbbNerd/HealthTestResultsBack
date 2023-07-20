@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const userDataSchema = new mongoose.Schema({
-  totalCholesterol: {
+  totalcholesterol: {
     type: Number,
     default: 0,
   },
-  hdlCholesterol: {
+  hdlcholesterol: {
     type: Number,
     default: 0,
   },
@@ -13,23 +13,23 @@ const userDataSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  ldlCholesterol: {
+  ldlcholesterol: {
     type: Number,
     default: 0,
   },
-  nonHdlCholesterol: {
+  nonhdlcholesterol: {
     type: Number,
     default: 0,
   },
-  triGlycerides: {
+  triglycerides: {
     type: Number,
     default: 0,
   },
-  totalCholesterolHdlRatio: {
+  totalcholesterolhdlratio: {
     type: Number,
     default: 0,
   },
-  tgRatio: {
+  tgratio: {
     type: Number,
     default: 0,
   },
