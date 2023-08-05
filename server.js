@@ -1,8 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
-
 const isAuthenticated = require("./middleware/auth");
+const errorHandler = require("./middleware/ErrorHandler.ts");
 const app = express();
 
 const DB = require("./database");
@@ -27,6 +27,8 @@ app.use("/register", require("./router/register"));
 app.use("/login", require("./router/login"));
 
 app.use("/userdata", isAuthenticated, require("./router/createRecord"));
+
+app.use(errorHandler);
 
 app.listen(8000, async () => {
   try {

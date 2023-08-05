@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const UserData = require("../models/userDataSchema");
 
-router.get("/", async (req, res, next) => {
+router.get("/", async (req, res) => {
   try {
     const { userId } = req.headers;
 
@@ -15,14 +15,13 @@ router.get("/", async (req, res, next) => {
       }),
     });
   } catch (err) {
-    console.error(err);
     return res
       .status(500)
       .json({ data: null, success: false, error: true, message: err.message });
   }
 });
 
-router.get("/report/:id", async (req, res, next) => {
+router.get("/report/:id", async (req, res) => {
   try {
     const dataId = req.params.id;
 
@@ -43,14 +42,13 @@ router.get("/report/:id", async (req, res, next) => {
       data: savedData,
     });
   } catch (err) {
-    console.error(err);
     return res
       .status(500)
       .json({ data: null, success: false, error: true, message: err.message });
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", async (req, res) => {
   try {
     const { userId } = req.headers;
 
@@ -63,7 +61,7 @@ router.post("/", async (req, res, next) => {
 
     return res.json({
       data: saved,
-      message: `Document saved`,
+      message: "Document saved",
       error: false,
       success: true,
     });
@@ -75,7 +73,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", async (req, res) => {
   try {
     const dataId = req.params.id;
     const savedData = await UserData.findById(dataId);
@@ -96,7 +94,7 @@ router.put("/:id", async (req, res, next) => {
 
     return res.json({
       data: updated,
-      message: `File updated successfully`,
+      message: "File updated successfully",
       error: false,
       success: true,
     });
@@ -108,7 +106,7 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", async (req, res) => {
   try {
     const dataId = req.params.id;
     const savedData = await UserData.findById(dataId);
