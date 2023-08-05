@@ -2,10 +2,10 @@
   "name": "server",
   "version": "1.0.0",
   "description": "server",
-  "main": "server.js",
+  "main": "server.ts",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node server.ts",
+    "dev": "nodemon server.ts"
   },
   "license": "ISC",
   "dependencies": {
@@ -19,8 +19,12 @@
     "typescript": "^5.1.6"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
-    "eslint": "^8.46.0"
+    "eslint": "^8.46.0",
+    "ts-node": "^10.9.1"
   }
 }

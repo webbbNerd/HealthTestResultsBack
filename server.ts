@@ -1,11 +1,12 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const isAuthenticated = require("./middleware/auth");
-const errorHandler = require("./middleware/ErrorHandler.ts");
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import { errorHandler } from "./src/middleware/ErrorHandler";
+import { isAuthenticated } from "./src/middleware/auth";
+import { DB } from "./database";
+
 const app = express();
 
-const DB = require("./database");
 dotenv.config({ path: "./config.env" });
 
 let ready = false;
@@ -23,10 +24,10 @@ app.get("/ping", (req, res) => {
   res.send("pong");
 });
 
-app.use("/register", require("./router/register"));
-app.use("/login", require("./router/login"));
+app.use("/register", require("./src/router/register"));
+app.use("/login", require("./src/router/login"));
 
-app.use("/userdata", isAuthenticated, require("./router/createRecord"));
+app.use("/userdata", isAuthenticated, require("./src/router/createRecord"));
 
 app.use(errorHandler);
 

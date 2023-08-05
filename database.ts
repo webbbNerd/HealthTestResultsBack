@@ -1,7 +1,10 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const DB = () => {
+export const DB = () => {
   const db = process.env.DATABASE_URL;
+  if (db == undefined) {
+    return;
+  }
 
   return mongoose.connect(db, {
     // useNewUrlParser: true,
@@ -10,5 +13,3 @@ const DB = () => {
     // useFindAndModify: false,
   });
 };
-
-module.exports = DB;
